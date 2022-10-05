@@ -1,0 +1,175 @@
+CLASS: StorageClass 
+
+Class Fields: fridgeMax = 10, freezerMax = 10, pantryMax = 10, freezerCount = 0, pantryCount = 0, fridgeCount = 0
+
+Default Constructor 
+IMPORT: NONE 
+EXPORT: constructors never export
+ Assertion: default values for storage class are set if the object has no particular specification
+ ALGORITHM:  
+           
+           CONSTRUCT storageArray USING default
+           storageArray[0][(pantryMax)]
+           storageArray[1][(freezerMax)] 
+           storageArray[2][(fridgeMax)]
+         
+ALternate Constructor
+IMPORT: theFridge (Integer), theFreezer (Integer), thePantry (Integer)
+EXPORT: constructors never export
+  Assertion: Before it creates the object it makes sure that they are valid inputs 
+  ALGORITHM: 
+             CONSTRUCT storageArray USING theFridge, theFreezer, thePantry
+             storageArray[0][(thePantry)]
+             storageArray[1][(theFreezer)] 
+             storageArray[2][(theFridge)]
+
+
+Copy Constructor 
+IMPORT: theStorage (StorageClass) 
+EXPORT: none 
+  Assertion: creates an object with an identical object state
+  ALGORITHM:
+            storageArray = theStorage.getArray <-- none
+            pantryMax = theStorage.getPantryMax <-- none 
+            freezerMax = theStorage.getFreezerMax <-- none 
+            fridgeMax = theStorage.getFridgeMax <-- none 
+          
+Accessors 
+
+SUBMODULE: getArray
+IMPORT: none
+EXPORT: storageArray (ARRAY OF FoodClass)
+  Assertion: will output copy of the type of storageArray
+  ALGORITHM: 
+            export copy of storageArray
+END SUBMODULE 
+
+SUBMODULE: getPantryMax
+IMPORT: none
+EXPORT: pantryMax (Integer)
+  Assertion: will output copy of the pantryMax
+  ALGORITHM: 
+            export copy of pantryMax 
+END SUBMODULE 
+
+SUBMODULE: getFreezerMax
+IMPORT: none
+EXPORT: freezerMax (Integer)
+  Assertion: will output copy of the freezerMax
+  ALGORITHM: 
+            export copy of freezerMax 
+END SUBMODULE  
+
+SUBMODULE: getFridgeMax
+IMPORT: none
+EXPORT: fridgeMax (Integer)
+  Assertion: will output copy of the fridgeMax
+  ALGORITHM: 
+            export copy of fridgeMax 
+END SUBMODULE 
+
+
+SUBMODULE: toString 
+IMPORT: none 
+EXPORT: storageString
+ Assertion: 
+ ALGORITHM: 
+           storageString =  "This storage array has the following elements "  + storageArray +  " and has a freezer capacity of: " +freezerMax+ " and a pantry capacity of: " +pantryMax+ " and a fridge capacity of: " +fridgeMax+ "."
+END SUBMODULE 
+ 
+SUBMODULE: equals 
+IMPORT: theObject 
+EXPORT: isequalto (boolean) 
+ Assertion: checks to ensure that theObject is part of the StorageClass
+ ALGORITHM: 
+           isequalto = false 
+            IF theObject is really a StorageClass THEN 
+               make theObject to an StorageClass named theStorage
+                  IF the storageArray same as theStorage.getArray <-- none  THEN 
+                    IF the pantryMax same as theStorage.getPantryMax <-- none THEN 
+                       IF the freezerMax same as theStorage.getFreezerMax <-- none THEN
+                           IF the fridgeMax same as theStorage.getFridgeMax <-- none THEN
+                             isequalto = true
+END SUBMODULE    
+
+
+Mutators
+
+MUTATOR: setArray 
+IMPORT: theStorageArray (ARRAY OF FoodClass)
+EXPORT: none 
+  Assertion: will change the data in the mutator
+  ALGORITHM: 
+            storageArray = theStorageArray
+END MUTATOR 
+
+SUBMODULE: setFreezer  
+IMPORT: theFreezer (Integer)
+EXPORT: none
+Assertion: will change the data in the mutator
+ALGORITHM: 
+          freezerMax = theFreezer 
+END SUBMODULE
+
+MUTATOR: setPantry 
+IMPORT: thePantry (Integer)
+EXPORT: none
+   Assertion: will change the data in the mutator  
+   ALGORTIHM:
+             fridgeMax = theFridge
+END MUTATOR  
+
+SUBMODULE:addFood                                   
+IMPORT: theFood (FoodClass)                        
+EXPORT: storageArray (ARRAY OF FoodClass)                           
+Assertion:  validates if the food belongs to the pantry
+ALGORITHM: 
+          TRY 
+             TRY 
+                temp = theFood.getStorageTemp <-- none 
+                
+              IF (validatePantry <-- temp)
+                   storageArray[0][pantryCount+1] = theFood      
+                    pantryCount+1
+                ELSE IF (validateFreezer <-- temp)
+                   storageArray[1][freezerCount+1] = theFood      
+                    freezrCount+1
+                  ELSE IF (validateFridge <-- temp)
+                     storageArray[2][fridgeCount+1] = theFood      
+                       fridgeCount+1
+                    END IF 
+               CATCH (NullPointerException) 
+                   OUTPUT "ERROR AN ELEMENT IS NULL & INVALID AND HAS NOT BEEN ADDED"
+
+            CATCH (IndexOutOfBoundsException)
+                  OUTPUT "INDEX OUT OF BOUNDS EXCEPTION"
+END SUBMODULE
+
+SUBMODULE: validateFridge                                   
+IMPORT: temp (Real)                        
+EXPORT: isvalid (boolean)                             
+Assertion:  validates if the food belongs to the fridge
+ALGORITHM: 
+          IF ((temp >= -2.0) AND (temp <= 6.0))
+             isvalid = true 
+          END IF 
+END SUBMODULE
+ 
+
+SUBMODULE: validateFreezer                                   
+IMPORT: temp (Real)                        
+EXPORT: isvalid (boolean)                             
+Assertion: validates if the food belongs to the freezer  
+ALGORITHM: 
+          IF ((temp >= -27.0) AND (temp <= -5.0))
+             isvalid = true 
+          END IF 
+END SUBMODULE
+ 
+
+                             
+
+
+ 
+
+                             

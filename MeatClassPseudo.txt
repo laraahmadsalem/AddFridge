@@ -1,0 +1,157 @@
+CLASS: MeatClass INHERITS from FoodClass (Implements Ifood)
+
+Class Fields: cut, weight
+
+Default Constructor 
+IMPORT: NONE 
+EXPORT: constructors never export
+ Assertion: default meat is Chicken breast 1kg with a storage temperature of 4.0 degrees and a use by date of 28 May with vacuum packaging 
+ ALGORITHM:  
+           
+           cut = "breast" 
+           weight = 1.0  
+         
+ALternate Constructor
+IMPORT: theName (String), theCut (String), theWeight (Real), theStorageTemp (Real), theDate (GregorianCalendar), thePackaging (String)
+EXPORT: constructors never export
+  Assertion: Before it creates the object it makes sure that they are valid inputs 
+  ALGORITHM: 
+             super <-- theName, theStorageTemp, thePackaging, theDate
+             IF ( ValidateW <--theWeight) AND (ValidateString <-- theCut) THEN 
+                
+                cut = theCut 
+                weight = theWeight
+                
+             ELSE 
+                  FAIL 
+             END IF 
+
+
+Copy Constructor 
+IMPORT: theMeat (MeatClass) 
+EXPORT: none 
+  Assertion: creates an object with an identical object state
+  ALGORITHM:
+            super <-- theMeat
+            cut = theCut.getCut <-- none 
+            weight = theWeight.getWeight <-- none 
+          
+Accessors 
+
+SUBMODULE: getCut
+IMPORT: none
+EXPORT: cut (String)
+  Assertion: will output copy of the type of cut 
+  ALGORITHM: 
+            export copy of cut
+END SUBMODULE 
+
+SUBMODULE: getWeight 
+IMPORT: none
+EXPORT: weight (Real)
+  Assertion: will output copy of the weight 
+  ALGORITHM: 
+            export copy of weight 
+END SUBMODULE  
+
+SUBMODULE: toString 
+IMPORT: none 
+EXPORT: meatString
+ Assertion: 
+ ALGORITHM: 
+            (super.toString <-- none +  " This meat has a cut which is of the type " +cut+  " with a weight of "  +weight+ " kg" 
+END SUBMODULE 
+
+SUBMODULE: writeOut 
+IMPORT: none 
+EXPORT: writeString (String)
+ Assertion: 
+ ALGORITHM: 
+           writeString = super.toString <-- none + +type+  ", " +volume
+END SUBMODULE 
+
+SUBMODULE: equals 
+IMPORT: theObject 
+EXPORT: isequalto (boolean) 
+ Assertion: checks to ensure that theObject is part of the Meat Class 
+ ALGORITHM: 
+           isequalto = false 
+            IF theObject is really a MeatClass THEN 
+               make theObject to an MeatClass named theMeat
+                IF super.equals <-- theMeat THEN
+                  IF the cut same as theMeat.getCut <-- none  THEN 
+                    IF the weight same as theMeat.getWeight <-- none THEN 
+                             isequalto = true
+END SUBMODULE    
+
+
+Mutators
+
+MUTATOR: setName 
+IMPORT: theName (String) 
+EXPORT: none 
+  Assertion: will change the data in the mutator
+  ALGORITHM: 
+            name = theName 
+END MUTATOR 
+
+SUBMODULE: clone  
+IMPORT: none
+EXPORT: MeatClass (MeatClass Object)
+Assertion: clones the object 
+ALGORITHM: 
+          exports copy of MeatClass
+END SUBMODULE
+
+MUTATOR: setCut 
+IMPORT: theCut (String)
+EXPORT: none
+   Assertion: will change the data in the mutator  
+   ALGORTIHM:
+             IF (ValidateString <-- theCut) THEN 
+             cut = theCut 
+END MUTATOR  
+
+MUTATOR: setWeight 
+IMPORT: theWeight (Real)
+EXPORT: none
+   Assertion: will change the data in the mutator  
+   ALGORTIHM: 
+             IF ValidateW <-- theweight THEN 
+             weight = theWeight
+         
+SUBMODULE: ValidateW
+IMPORT: theWeight (Real) 
+EXPORT: ValidateW
+ Assertion: 
+ ALGORITHM: 
+           ValidateW = false 
+           IF theWeight between 0.2 and 5.0 inclusive THEN 
+               ValidateW = true 
+                 END IF 
+END SUBMODULE 
+
+SUBMODULE: validateString
+IMPORT: word (String)
+EXPORT: valid (boolean)
+ Assertion: validates if the date is valid if not will disregard the object
+ ALGORITHM: 
+            IF word != null THEN 
+               valid = true 
+END SUBMODULE 
+
+SUBMODULE: calcSpace                                     
+IMPORT: food (FoodClass Object)                          
+EXPORT: space (Integer)                                 
+Assertion: calculates the space in weight   
+ALGORITHM: 
+          space =  (Convert to Integer) (weight * 0.86)
+END SUBMODULE
+ 
+
+                             
+
+
+ 
+
+                             

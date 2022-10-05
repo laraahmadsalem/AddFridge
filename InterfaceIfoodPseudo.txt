@@ -1,0 +1,4 @@
+INTERFACE: Ifood
+
+calcExpiry <-- today (GregorianCalendar Object)
+calcSpace <-- food   (FoodClass Object)

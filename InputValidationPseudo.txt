@@ -1,0 +1,128 @@
+CLASS: InputValidation 
+
+SUBMODULE: doubleValid 
+IMPORT: value (Real), min (Real), max (Real)
+EXPORT: validate (boolean) 
+ Assertion: imports the min and max and compares it to value to make sure its in the range
+ ALGORITHM: 
+           IF ((value >= min) AND (value <= max)) 
+              validate = true 
+           END IF 
+END SUBMODULE 
+
+SUBMODULE: intValid 
+IMPORT: value (Integer), min (Integer), max (Integer)
+EXPORT: validate (boolean)
+ Assertion: validates all the integer values regarding user input and file IO 
+ ALGORITHM: 
+           IF ((value >= min) AND (value <= max)) 
+              validate = true 
+           END IF 
+END SUBMODULE
+
+SUBMODULE: stringValid
+IMPORT: word (String)
+EXPORT: validate (boolean)
+ Assertion: makes sure string is not null 
+ ALGORITHM: 
+           IF ( word NOT null) 
+               validate = true 
+           END IF 
+END SUBMODULE
+
+SUBMODULE: doubleInput
+IMPORT: prompt (String)
+EXPORT: value (Real)
+Assertion: handles all the inputs related to reals 
+ALGORITHM: 
+          TRY 
+             OUTPUT prompt 
+             INPUT value 
+          CATCH (InputMismatchException)
+              OUTPUT "DO NOT ENTER LETTERS"
+              OUTPUT "TRY AGAIN!!" 
+              INPUT value
+          END TRY CATCH 
+END SUBMODULE  
+
+SUBMODULE: stringInput
+IMPORT: prompt (String), errorPrompt  (String) 
+EXPORT: answer (String) 
+Assertion: handles all string inputs to make sure they are not null 
+ALGORITHM: 
+          OUTPUT prompt 
+          INPUT answer 
+          
+          IF (stringValid <-- answer == false) 
+             OUTPUT errorPrompt
+             OUTPUT "Please try again" 
+             INPUT answer 
+          END IF 
+END SUBMODULE 
+
+SUBMODULE: dateInput 
+IMPORT: prompt (String) 
+EXPORT: theDate (GregorianCalendar Object) 
+Assertion: handles the input of strings that are to be converted into a calendar object 
+ALGORITHM: 
+          OUTPUT prompt 
+          
+          OUTPUT "Enter the day in the form DD (e.g. 23)"
+          INPUT dayOfMonth 
+
+          OUTPUT "Enter the month in the form MM (e.g. 09)"
+          INPUT month 
+ 
+          OUTPUT "Enter the year in the form YYYY (e.g. 2018)"
+          INPUT year 
+
+          CONSTRUCT theDate USING year, month, dayOfMonth
+
+END SUBMODULE 
+
+SUBMODULE: validDate
+IMPORT: date (GregorianCalendar Object) 
+EXPORT: valid (boolean)
+Assertion: check to make sure that the date is after a the GregorianCalendar Object compare
+ALGORITHM: 
+  IF (date.after <-- compare) 
+      valid = true
+  END IF 
+
+END SUBMODULE 
+
+SUBMODULE: intInput 
+IMPORT: prompt (String)
+EXPORT: value (Integer 
+Assertion: handles all the Integer inputs to make sure they are all valid 
+ALGORITHM: 
+  TRY 
+     OUTPUT prompt
+     INPUT value 
+  CATCH (InputMismatchException) 
+     OUTPUT "DO NOT ENTER LETTERS"
+     OUTPUT "TRY AGAIN!!"
+     INPUT value 
+  END TRY CATCH 
+
+END SUBMODULE 
+
+SUBMODULE: storageSelection
+IMPORT: none 
+EXPORT: selection (Integer) 
+Assertion: ensures the user inputs correct value by using a try catch 
+ALGORITHM: 
+          TRY 
+            OUTPUT "What storage location would you like to display? Enter from the following options:"
+            OUTPUT "(1) Pantry" 
+            OUTPUT "(2) Fridge" 
+            OUTPUT "(3) Freezer"
+
+            INPUT selection
+          
+          CATCH (InputMismatchException) 
+              OUTPUT "DO NOT ENTER LETTERS"
+              OUTPUT "TRY AGAIN!!"
+              INPUT selection
+          END TRY CATCH 
+END SUBMODULE 

@@ -1,0 +1,192 @@
+CLASS: TheMenu 
+
+MAIN
+
+OUTPUT"Please input the name of the file to initialise the values of the storage (pantry,fridge,freezer) or press enter to skip"
+INPUT fileName
+
+fridgeNum = FileIO.getNum <-- fileName, "Fridge
+freezerNum = FileIO.getNum<--fileName,"Freezer"
+pantryNum = FileIO.getNum<--fileName, "Pantry"
+
+CONSTRUCT storage USING fridgeNum,freezerNum,pantryNum
+
+DO 
+   TRY 
+              OUTPUT "==================="     
+              OUTPUT "     MAIN MENU    "
+              OUTPUT "===================" 
+              OUTPUT "Please select: "
+              OUTPUT "1. Add a Food"
+              OUTPUT "2. Display Contents"
+              OUTPUT "3. Find Expired"
+              OUTPUT "4. Read in Storage" 
+              OUTPUT "5. Write out Storage"
+              OUTPUT "6. Remove Food"
+              OUTPUT "7. Exit");
+              OUTPUT "==================="            
+
+              INPUT theInput 
+   CATCH (InputMismatchException )
+
+          OUTPUT "Error you cannot enter letters."
+          OUTPUT  "Please try again!"
+          INPUT theInput
+   END TRY CATCH 
+
+   CASE theInput
+     1: 
+     addFood <-- storage 
+
+     2: 
+     displayContents <-- storage 
+
+     3: 
+     findExpired <-- storage 
+    
+     4:
+     fileReader <-- storage 
+   
+     5: 
+     writeOut <-- storage 
+
+     6:
+     removeFood <-- storage 
+
+     7: 
+     OUTPUT "Program will now exit" 
+
+   END CASE 
+
+WHILE ((theInput > 7) OR (theInput NOT 7)) 
+
+SUBMODULE: addFood 
+IMPORT: storage (StorageClass Object) 
+EXPORT: none 
+Assertion: Is the submodule that invokes all the methods related to adding food 
+ALGORITHM: 
+          DO 
+             TRY 
+                OUTPUT "                                        "
+                OUTPUT "What type of food would you like to add?"
+                OUTPUT "                                      "
+                OUTPUT "Select an option from the numbers below"
+                OUTPUT "======================================="
+                OUTPUT "1. Meat"
+                OUTPUT "2. Grain" 
+                OUTPUT "3. Fruit"
+                OUTPUT "4. Vegetables"
+                OUTPUT "5. Go back to the main menu"
+                OUTPUT "======================================="
+
+                INPUT userInput 
+  
+           CATCH (InputMismatchException )
+              OUTPUT "Error you cannot enter letters."
+              OUTPUT  "Please try again!"
+              INPUT userInput
+          END TRY CATCH 
+
+         CASE userInput
+     	    1: 
+            UserInput.meat <--storage
+
+           2: 
+           UserInput.grain <-- storage 
+
+           3: 
+           UserInput.fruit <-- storage 
+    
+           4:
+           UserInput.veg <-- storage 
+   
+           5:  
+           OUTPUT "Taking you back to the main!!" 
+
+        END CASE
+  WHILE (userInput NOT 5)
+
+END SUBMODULE 
+
+SUBMODULE:fileReader
+IMPORT: storage (StorageClass Object)
+EXPORT: none
+Assertion: deals with file I/O methods and class 
+ALGORITHM: 
+          OUTPUT "Please input the name of the file you are reading in from "
+          INPUT fileName
+  
+          lineNum = FileIO.checkLine <-- fileName
+
+          CONSTRUCT foodArray USING lineNum 
+          foodArray = FileIO.readFile <--- fileName, foodArray 
+          
+          FOR i=0 TO LENGTH OF foodArray INC BY 1 
+              storage.addFood <-- foodArray[i] 
+          END FOR 
+END SUBMODULE 
+
+SUBMODULE: findExpired 
+IMPORT: storage (StorageClass Object) 
+EXPORT: none 
+Assertion: deals with the expired methods by invoking them from different classes
+ALGORITHM: 
+          storageArray = storage.getArray <-- none
+
+          TRY 
+              FOR (i=0 TO LENGTH OF storageArray[0] INC BY 1 
+                  UserInput.outputPantry <-- storage, i 
+              END FOR 
+          CATCH (NullPointerException) 
+              OUTPUT "There are no expired elements, hence NULL"
+          END TRY CATCH 
+ 
+          TRY 
+              FOR (i=0 TO LENGTH OF storageArray[1] INC BY 1 
+                  UserInput.outputFreezer <-- storage, i 
+              END FOR 
+          CATCH (NullPointerException) 
+              OUTPUT "There are no expired elements in the Pantry, hence NULL"
+          END TRY CATCH 
+
+          TRY 
+              FOR (i=0 TO LENGTH OF storageArray[2] INC BY 1 
+                  UserInput.outputFridge <-- storage, i 
+              END FOR 
+          CATCH (NullPointerException) 
+              OUTPUT "There are no expired elements in the Freezer, hence NULL"
+          END TRY CATCH 
+END SUBMODULE 
+
+SUBMODULE: displayContents 
+IMPORT: storage (StorageClass Object)
+EXPORT: none 
+Assertion: deals with the class user input that handles displaying the contents of the storage
+ALGORITHM: 
+           selection = InputValidation.storageSelection <-- none 
+           UserInput.display <-- storage, selection 
+END SUBMODULE 
+
+SUBMODULE: removeFood 
+IMPORT: storage (StorageClass Object)
+EXPORT: none 
+Assertion: deals with removing food by invoking methods in other classes
+ALGORITHM: 
+          OUTPUT "Welcome to the remove food section!!" 
+          UserInput.removal <-- storage 
+END SUBMODULE 
+
+SUBMODULE: writeOut 
+IMPORT: storage (StorageClass Object)
+EXPORT: none 
+Assertion: deals with writing out food by invoking methods in File IO class
+ALGORITHM: 
+          OUTPUT "Please input the name of the file you want to write to"
+          INPUT fileName 
+ 
+          FileIO.writeToFile <-- storage, fileName
+END SUBMODULE 
+
+
+
+

@@ -1,0 +1,173 @@
+ABSTRACT CLASS: FoodClass
+Assertion:
+Class Fields: name (String), packaging (String), date(GregorianCalendar Object), storageTemperature (Real)
+Abstract method: foodClone<--none
+
+Default Constructor 
+IMPORT: NONE 
+EXPORT: constructors never export
+ Assertion: default values for food are set if the object does not have any specs
+ ALGORITHM:  
+           name = " "
+           storageTemperature = 0.0
+           packaging = " "
+           date = CONSTRUCT date USING default
+
+ALternate Constructor
+IMPORT: theName (String),theStorageTemp (Real),thePackaging (String), theDate(GregorianCalendar Object)
+EXPORT: constructors never export
+  Assertion: Before it creates the object it makes sure that they are valid inputs 
+  ALGORITHM: 
+             IF (( validateString <--theName) AND (validateString <-- thePackaging) AND (validDate <-- theDate)) THEN 
+               
+                name = theName
+               	storageTemperature = theStorageTemp               
+                packaging = thePackaging
+                date = theDate
+             ELSE 
+                FAIL 
+             END IF 
+
+Copy Constructor 
+IMPORT: theFood (FoodClass) 
+EXPORT: none 
+  Assertion: 
+  ALGORITHM:
+            name = theFood.getName <-- none
+            storageTemperature = theFood.getStorageTemp <-- none 
+            packaging = thePackaging.getPackaging <-- none 
+            date = theFood.getDate<-- none
+
+Accessors 
+
+SUBMODULE: getName 
+IMPORT: none
+EXPORT: name (String)
+  Assertion: will output copy of the name 
+  ALGORITHM: 
+            export copy of name 
+END SUBMODULE 
+ 
+SUBMODULE: getStorageTemp
+IMPORT: none
+EXPORT: storageTemperature (Real)
+  Assertion: will output copy of the Storage Temperature  
+  ALGORITHM: 
+            export copy of storage temperature 
+END SUBMODULE 
+
+SUBMODULE: getPackaging 
+IMPORT: none
+EXPORT: packaging (String)
+  Assertion: will output copy of the type of packaging 
+  ALGORITHM: 
+            export copy of packaging
+END SUBMODULE 
+
+SUBMODULE: getDate
+IMPORT: none
+EXPORT: date (GregorianClass Object)
+  Assertion: will output copy of the Date 
+  ALGORITHM: 
+            export copy of useby date 
+END SUBMODULE 
+
+SUBMODULE: toString 
+IMPORT: none 
+EXPORT: foodString (String)
+ Assertion: prints out a string representation of the object
+ ALGORITHM: 
+            foodString = “This food is ”  + name + "and uses" + packaging + ", with a storage temperature of " +storageTemperature+ " degrees." + " It has an expiration date of "  + date.getTime<-- none + ".");
+              
+END SUBMODULE 
+
+SUBMODULE: writeOut
+IMPORT: none 
+EXPORT: writeString (String)
+ Assertion:prints out the objects in the same format as input file 
+ ALGORTIHM: 
+           writeString = name+ ", " +packaging+ ", " +storageTemperature+ ", "  date.getTime<-- none + ", "
+          
+
+SUBMODULE: equals 
+IMPORT: theObject 
+EXPORT: isequalto (boolean) 
+ Assertion: two foods are interchangeable if they have are equal     
+ ALGORITHM: 
+           isequalto = false 
+            IF theObject is really a FoodClass THEN 
+               make theObject to an FoodClass named theFruit
+                IF the name same as theFood.getName <-- none  THEN 
+                   IF the storageTemperature same as theFood.getStorageTemp <-- none THEN 
+                       IF the packaging same as theFruit.getPackaging <-- none THEN 
+                         IF the date same as theFood.getDate <-- none THEN                      
+                             isequalto = true
+END SUBMODULE    
+
+
+Mutators
+
+MUTATOR: setName 
+IMPORT: theName (String) 
+EXPORT: none 
+  Assertion: will change the data in the mutator
+  ALGORITHM: 
+            name = theName 
+END MUTATOR 
+             
+MUTATOR: setStorageTemperature 
+IMPORT: theStorageTemp
+EXPORT: none  
+   Assertion: will change the data in the mutator  
+   ALGORTIHM:
+             storageTemperature = theStorageTemp              
+END MUTATOR  
+
+MUTATOR: setPackaging
+IMPORT: thePackaging (String) 
+EXPORT: none 
+   Assertion: will change the data in the mutator  
+   ALGORTIHM:
+             packaging = thePackaging
+END MUTATOR   
+
+MUTATOR: setDate
+IMPORT: theDate (GregorianCalendar Object) 
+EXPORT: none 
+   Assertion: will change the data in the mutator  
+   ALGORTIHM:
+             packaging = thePackaging
+END MUTATOR  
+
+SUBMODULE: validateString
+IMPORT: word (String)
+EXPORT: valid (boolean)
+ Assertion: validates if the date is valid if not will disregard the object
+ ALGORITHM: 
+            IF word != null THEN 
+               valid = true 
+END SUBMODULE 
+
+SUBMODULE: validDate                                     
+IMPORT: date (GregorianCalendar Object)                  
+EXPORT: valid (boolean)                                  
+ Assertion: validates if the date is after  1/01/2018     
+             to determine whether the food is expired 
+ ALGORITHM: 
+           IF date.after <-- compare THEN 
+              valid = true
+END SUBMODULE
+
+SUBMODULE: calcExpiry                                    
+IMPORT: date (GregorianCalendar Object)                 
+EXPORT: valid (boolean)                                  
+ Assertion: validates if the date is before this instance 
+            to determine whether the food is expired  
+ ALGORITHM: 
+            IF date.before <-- today THEN
+               valid = true
+END SUBMODULE
+
+
+ 
+

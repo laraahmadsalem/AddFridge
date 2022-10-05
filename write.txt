@@ -1,0 +1,4 @@
+(Location: Freezer) Beef, Vacuum, -18.0, Mon Oct 01 00:00:00 AWST 2018, fillet, 1.3
+(Location: Freezer) Beef, vaccuum, -18.0, Sun Apr 01 00:00:00 AWST 2018, fillet, 1.3
+(Location: Freezer) fish, plastic, -15.0, Sun Dec 02 00:00:00 AWST 2018, fillet, 2.4
+(Location: Fridge) carrot, plastic, -2.0, Mon Oct 01 00:00:00 AWST 2018, 3.0

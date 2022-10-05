@@ -1,0 +1,146 @@
+CLASS: GrainClass INHERITS from FoodClass (Implements Ifood)
+
+Class Fields:  type, volume
+
+Default Constructor 
+IMPORT: NONE 
+EXPORT: constructors never export
+ Assertion: default object is created 
+ ALGORITHM:  
+          
+           type = "Whole Grain" 
+           volume = 5.0  
+
+           
+
+ALternate Constructor
+IMPORT:  theName (String), theType(String), theVolume(Real)
+         theStorageTemp (Real), theDate(GregorianCalendar) 
+         thePackaging (String), 
+EXPORT: constructors never export
+  Assertion: Before it creates the object it makes sure that they are valid inputs 
+  ALGORITHM: 
+             super <-- theName,theStorageTemp, thePackaging, theDate
+             IF ( validateV <--theVolume) AND (validateString <-- theType) THEN 
+          
+                type = theType 
+                volume = theVolume
+                
+             ELSE 
+                FAIL 
+             END IF 
+ 
+
+Copy Constructor 
+IMPORT: theGrain (GrainClass) 
+EXPORT: none 
+  Assertion: 
+  ALGORITHM:
+            super <-- theGrain
+            type = theType.getType <-- none 
+            volume = theVolume.getVolume <-- none 
+
+            
+Accessors 
+
+SUBMODULE: getType
+IMPORT: none
+EXPORT: type (String)
+  Assertion: will output copy of the type 
+  ALGORITHM: 
+            export copy of type
+END SUBMODULE 
+
+SUBMODULE: getVolume 
+IMPORT: none
+EXPORT: Volume (Real)
+  Assertion: will output copy of the volume
+  ALGORITHM: 
+            export copy of volume 
+END SUBMODULE 
+
+SUBMODULE: toString 
+IMPORT: none 
+EXPORT: grainString
+ Assertion: 
+ ALGORITHM: 
+           grainString = super.toString <-- none + " The type of this grain is " +type+  " with a volume of "  +volume+ " mL"
+END SUBMODULE 
+
+SUBMODULE: writeOut 
+IMPORT: none 
+EXPORT: writeString (String)
+ Assertion: 
+ ALGORITHM: 
+           writeString = super.toString <-- none  +type+  ", " +volume
+END SUBMODULE 
+
+SUBMODULE: equals 
+IMPORT: theObject 
+EXPORT: isequalto (boolean) 
+ Assertion: checks to ensure that theObject is part of the Grain Class 
+ ALGORITHM: 
+           isequalto = false 
+            IF theObject is really a GrainClass THEN 
+               make theObject to an GrainClass named theGrain
+                IF the super.equals <-- TheGrain THEN 
+                  IF the type same as theGrain.getType <-- none  THEN 
+                    IF the volume same as theGrain.getVolume <-- none THEN 
+                           isequalto = true
+END SUBMODULE  
+
+SUBMODULE: clone  
+IMPORT: none
+EXPORT: GrainClass (GrainClass Object)
+Assertion: clones the object 
+ALGORITHM:
+          exports copy of GrainClass
+
+END SUBMODULE
+
+Mutators
+
+MUTATOR: setType 
+IMPORT: theType (String)
+EXPORT: none
+   Assertion: will change the data in the mutator  
+   ALGORTIHM:
+             IF validateString <-- theType THEN 
+             type = theType 
+END MUTATOR  
+
+MUTATOR: setVolume 
+IMPORT: theVolume (Real)
+EXPORT: none
+   Assertion: will change the data in the mutator  
+   ALGORTIHM: 
+             IF validateV <-- theVolume THEN 
+             volume = theVolume
+END MUTATOR  
+
+SUBMODULE: validateV                                    
+IMPORT: theVolume (Real)                  
+EXPORT: validateV (boolean)                                  
+ Assertion: validates if the volume is within the range
+ ALGORITHM: 
+           IF theVolume >= 0.2 && theVolume <= 5.0 THEN 
+              valid = true
+END SUBMODULE
+
+SUBMODULE: validateString
+IMPORT: word (String)
+EXPORT: valid (boolean)
+ Assertion: validates if the date is valid if not will disregard the object
+ ALGORITHM: 
+            IF word != null THEN 
+               valid = true 
+END SUBMODULE 
+
+SUBMODULE: calcSpace                                     
+IMPORT: food (FoodClass Object)                          
+EXPORT: space (Integer)                                 
+Assertion: calculates the space in volume   
+ALGORITHM: 
+          space =  (Convert to Integer) (volume * 1.0)
+END SUBMODULE
+ 

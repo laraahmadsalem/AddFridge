@@ -1,0 +1,207 @@
+CLASS: UserInput
+
+SUBMODULE: meat
+IMPORT: storage (StorageClass Object)
+EXPORT: none 
+ASSERTION: This submodule calls the input validation class and sends the inputs for validation before constructing the object
+ALGORITHM:
+          theName = InputValidation.stringInput <-- "what is the name of your meat", "your name cannot be null!"
+          theCut = InputValidation.stringInput <-- "What is the cut of your meat","your cut cannot be null"
+          theStorageTemp = InputValidation.doubleInput <-- "Please input the weight of the meat (e.g 3.5) "
+          theDate = InputValidation.dateInput <-- "Please input the useby date of the meat"
+          thePackaging = InputValidation.stringInput <-- "Please input the type of packaging of the meat", "your packaging cannot be null"
+
+          IF ((InputValidation.doubleValid <-- theWeight, 0.2,0.5) AND (InputValidation.validDate <--theDate)) THEN 
+              CONSTRUCT meat USING theName, theCut, theWeight, theStorageTemp, theDate, thePackaging
+                storage.addFood <-- meat
+          ELSE 
+               OUTPUT "INVALID MEAT, OBJECT NOT CREATED"
+          END IF 
+END SUBMODULE 
+
+
+SUBMODULE: grain
+IMPORT: storage (StorageClass Object)
+EXPORT: none 
+ASSERTION: This submodule calls the input validation class and sends the inputs for validation before constructing the object
+ALGORITHM:
+           aName = InputValidation.stringInput <-- "Please input the name of the grain","your grain name cannot be null"
+           theType =  InputValidation.stringInput <-- "Please input the type of grain","your grain type cannot be null"
+           theBestBefore = InputValidation.dateInput <-- "Please input the best before date of the grain"
+           aPackaging = InputValidation.stringInput <--"Please input the type of packaging of the grain","your grain pacakging cannot be null"
+           theVolume = InputValidation.doubleInput <--"Please input the volume of the grain"
+           aStorageTemp = InputValidation.doubleInput <--"Please input the storage temperature of the grain you would like to store"
+
+          IF ((InputValidation.doubleValid <-- theVolume, 0.2,0.5) AND (InputValidation.validDate <--theBestBefore)) THEN 
+              CONSTRUCT grain USING aName, theType, theVolume, aStorageTemp, theBestBefore, aPackaging
+                storage.addFood <-- grain
+          ELSE 
+               OUTPUT "INVALID GRAIN, OBJECT NOT CREATED"
+          END IF 
+END SUBMODULE 
+
+
+SUBMODULE: fruit
+IMPORT: storage (StorageClass Object)
+EXPORT: none 
+ASSERTION: This submodule calls the input validation class and sends the inputs for validation before constructing the object
+ALGORITHM:
+           setName = InputValidation.stringInput <-- "Please input the name of the fruit","your fruit name cannot be null"
+           theType =  InputValidation.stringInput <-- "Please input the type of the fruit","your fruit type cannot be null"
+           theNumberOfPieces = InputValidation.intInput <-- "Please input the number of pieces of the fruit"
+           theUseby = InputValidation.dateInput <--"Please input the useby date of the fruit"
+           setPackaging = InputValidation.stringInput <--"Please input the type of packaging of the fruit","your fruit packaging cannot be null"
+           theTemp = InputValidation.doubleInput <--"Please input the storage temperature of the fruit you would like to store"
+
+          IF ((InputValidation.intValid <-- theNumberOfPieces,1,20) AND (InputValidation.validDate <--theUseby)) THEN 
+              CONSTRUCT fruit USING setName, setType, theNumberOfPieces, theTemp, theUseby, setPackaging
+                storage.addFood <-- fruit
+          ELSE 
+               OUTPUT "INVALID FRUIT, OBJECT NOT CREATED"
+          END IF 
+END SUBMODULE 
+
+SUBMODULE: veg
+IMPORT: storage (StorageClass Object)
+EXPORT: none 
+ASSERTION: This submodule calls the input validation class and sends the inputs for validation before constructing the object
+ALGORITHM:
+           name = InputValidation.stringInput <-- "Please input the name of the veg ","your veg name cannot be null"
+           vegWeight =  InputValidation.stringInput <-- "Please input the weight of veg"
+           vegBestBefore = InputValidation.dateInput <--"Please enter the best before date of the veg"
+           setPack = InputValidation.stringInput <--"Please input the type of packaging of the veg","your veg packaging cannot be null"
+           sTemp = InputValidation.doubleInput <--"Please input the storage temperature of the veg you would like to store"
+
+          IF ((InputValidation.doubleValid <-- vegWeight, 0.2,0.5) AND (InputValidation.validDate <--vegBestBefore)) THEN 
+              CONSTRUCT veg USING name,vegWeight, sTemp, vegBestBefore, setPack
+                storage.addFood <-- veg
+          ELSE 
+               OUTPUT "INVALID VEGETABLE, OBJECT NOT CREATED"
+          END IF 
+END SUBMODULE 
+
+SUBMODULE: display 
+IMPORT: storage (StorageClass Object), selection (Integer)
+EXPORT: none 
+ASSERTION: calls in the storage and gets the food array to output all the foods located in the various storage location 
+ALGORITHM: 
+       storageArray = storage.getArray <-- none 
+          
+       CASE selection 
+          1: 
+          TRY 
+              IF (storageArray[0](LENGTH OF storageArray[0] != null)
+                 OUTPUT "The pantry includes the following foods:"
+                   FOR i=0 TO storageArray[0](LENGTH OF storageArray[0]) INC BY 1
+                       IF (storageArray[0](LENGTH OF storageArray[0] != null)
+                         OUTPUT "storageArray[0][i].toString <--none"
+                       END IF 
+                    END FOR 
+               END IF 
+             END TRY
+           CATCH (ArrayIndexOutOfBoundsException)
+                OUTPUT "PANTRY LOCATION WAS NOT INITIALISED HENCE EMPTY"
+           END CATCH 
+
+           2: 
+           TRY 
+              IF (storageArray[2](LENGTH OF storageArray[2] != null)
+                 OUTPUT "The fridge includes the following foods:"
+                   FOR i=0 TO storageArray[2](LENGTH OF storageArray[2]) INC BY 1
+                       IF (storageArray[2](LENGTH OF storageArray[2] != null)
+                         OUTPUT "storageArray[2][i].toString <--none"
+                       END IF 
+                    END FOR 
+               END IF 
+             END TRY
+           CATCH (ArrayIndexOutOfBoundsException)
+                OUTPUT "FRIDGE LOCATION WAS NOT INITIALISED HENCE EMPTY"
+           END CATCH 
+
+           3: 
+           TRY 
+              IF (storageArray[1](LENGTH OF storageArray[1] != null)
+                 OUTPUT "The freezer includes the following foods:"
+                   FOR i=0 TO storageArray[1](LENGTH OF storageArray[1]) INC BY 1
+                       IF (storageArray[1](LENGTH OF storageArray[1] != null)
+                         OUTPUT "storageArray[1][i].toString <--none"
+                       END IF 
+                    END FOR 
+               END IF 
+             END TRY
+           CATCH (ArrayIndexOutOfBoundsException)
+                OUTPUT "FRIDGE LOCATION WAS NOT INITIALISED HENCE EMPTY"
+           END CATCH
+     END CASE 
+
+SUBMODULE: removal 
+IMPORT: storage (StorageClass Object) 
+EXPORT: none 
+Assertion: goes through the arrays based on user input and removes the selected food
+ALGORITHM: 
+          location = InputValidation.intInput <-- "which storage location would you like to remove from? Enter a number from the following (1)Pantry (2)Fridge (3)Freezer "
+          index = InputValidation.intInput <-- "Please input the index of the food you would like to remove"
+   
+          storageArray = storage.getArray <-- none
+         
+        CASE location
+          1: 
+          OUTPUT "storageArray[0][index]+ "will now be removed" 
+          storageArray[0][index] = null 
+             
+           FOR i=0 TO storageArray[0](LENGTH OF storageArray[0] -1) INC BY 1
+                       IF ((storageArray[0](LENGTH OF storageArray[0] = null) AND (i<storageArray[0](LENGTH OF storageArray[0]))
+                           storageArray[0][i] = storageArray[0][i+1]
+                           storageArray[0][i+1] = null
+                       END IF 
+            END FOR 
+               
+           2: 
+           OUTPUT "storageArray[2][index]+ "will now be removed" 
+           storageArray[2][index] = null 
+             
+           FOR i=0 TO storageArray[0](LENGTH OF storageArray[2] -1) INC BY 1
+                       IF ((storageArray[2](LENGTH OF storageArray[2] = null) AND (i<storageArray[2](LENGTH OF storageArray[2]))
+                           storageArray[2][i] = storageArray[2][i+1]
+                           storageArray[2][i+1] = null
+                       END IF 
+            END FOR 
+
+           3: 
+           OUTPUT "storageArray[1][index]+ "will now be removed" 
+           storageArray[1][index] = null 
+             
+           FOR i=0 TO storageArray[1](LENGTH OF storageArray[1] -1) INC BY 1
+                       IF ((storageArray[1](LENGTH OF storageArray[1] = null) AND (i<storageArray[1](LENGTH OF storageArray[1]))
+                           storageArray[1][i] = storageArray[1][i+1]
+                           storageArray[1][i+1] = null
+                       END IF 
+            END FOR 
+     END CASE 
+
+SUBMODULE: outputPantry 
+IMPORT: storage (StorageClass Object), i (Integer)
+EXPORT: none 
+Assertion: gets array and outputs the expired elements 
+ALGORITHM: 
+          foodArray = storage.getArray <-- none 
+          OUTPUT "This food located in the PANTRY is expired:" +foodArray[0][i].toString<--none
+END SUBMODULE 
+
+SUBMODULE: outputFreezer
+IMPORT: storage (StorageClass Object), i (Integer)
+EXPORT: none 
+Assertion: gets array and outputs the expired elements 
+ALGORITHM: 
+          foodArray = storage.getArray <-- none 
+          OUTPUT "This food located in the FREEZER is expired:" +foodArray[1][i].toString<--none
+END SUBMODULE 
+
+SUBMODULE: outputPantry 
+IMPORT: storage (StorageClass Object), i (Integer)
+EXPORT: none 
+Assertion: gets array and outputs the expired elements 
+ALGORITHM: 
+          foodArray = storage.getArray <-- none 
+          OUTPUT "This food located in the FRIDGE is expired:" +foodArray[1][i].toString<--none
+END SUBMODULE 

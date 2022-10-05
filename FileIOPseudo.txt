@@ -1,0 +1,228 @@
+CLASS: FileIO
+
+SUBMODULE: getNum
+IMPORT: fileName(String), word (String)  
+EXPORT: count (Integer) 
+ ASSERTION: goes through first 3 lines of the file so it   
+            gets values for freezer,pantry,fridge to       
+            construct the storage class   
+ ALGORITHM: 
+           count = 0        
+           theFile = OPENFILE fileName
+
+           IF theFile CAN`T BE OPENED THEN
+	     FAIL (THROW EXCEPTION)
+	   ENDIF
+         
+           INPUT line from theFile
+           FOR i=0 TO 3 (EXCLUSIVE) INC BY 1
+               CONSTRUCT tokenizer USING line, "," 
+               storage = " " 
+               
+               IF storage EQUALS word 
+                  count = Integer.parseInt <-- tokenizer.nextToken <-- none
+               END IF 
+
+               INPUT line from theFile
+           END FOR 
+
+           CLOSEFILE theFile
+
+END SUBMODULE 
+
+SUBMODULE: checkLine                                      
+IMPORT: fileName    (String)                              
+EXPORT: lineNum (Integer)                                 
+ ASSERTION: counts how many lines are in the file so it    
+            knows the length of the array for food 
+ ALGORITHM: 
+           lineNum = 0 
+           theFile = OPENFILE fileName
+
+           IF theFile CAN'T BE OPENED THEN 
+             FAIL (THRIW EXCEPTION) 
+           END IF 
+
+           INPUT line from theFile
+           INPUT line from theFile
+           INPUT line from theFile
+           INPUT line from theFile
+   
+           	WHILE (line NOT EOF)
+                 	lineNum +1 
+                 	INPUT line from theFile
+           	END WHILE 
+
+           CLOSEFILE theFile
+
+END SUBMODULE 
+
+SUBMODULE: readFile 
+IMPORT: fileName (String), foodArray (ARRAY OF FoodClass) 
+EXPORT: foodArray (ARRAY OF FoodClass) 
+Assertion: reads over the file and decides which object   
+           to create based on the  first column and then  
+           returns a populated food array    
+ALGORITHM: 
+           index = 0 
+           theFile = OPENFILE fileName
+
+           IF theFile CAN'T BE OPENED THEN 
+             FAIL (THRIW EXCEPTION) 
+           END IF 
+
+           INPUT line from theFile
+ 
+           WHILE (line NOT EOF)
+               tWord = processString <-- line 
+
+             IF (tWord EQUALS "Meat") 
+                CONSTRUCT tokenizer USING line, ","
+       
+                iD = tokenizer.nextToken <-- none
+                name = tokenizer.nextToken <-- none
+                cut = tokenizer.nextToken <-- none
+                weight = Double.parseDouble <--tokenizer.nextToken <-- none
+                storageTemp = Double.parseDouble <--tokenizer.nextToken <-- none
+                useBy = tokenizer.nextToken <-- none
+                packaging = tokenizer.nextToken <-- none 
+
+                 CONSTRUCT token USING useBy, "/"
+                 day = Integer.parseInt<--token.nextToken <-- none 
+                 month = Integer.parseInt <--token.nextToken <-- none
+                 year = Integer.parseInt<--token.nextToken <-- none
+
+                 CONSTRUCT theUseby USING year, month, day
+
+                  IF (InputValidation.stringValid <-- name) AND (InputValidation.doubleValid<--weight, 0.2, 5.0) AND (InputValidation.validDate<--theUseby) 
+                     CONSTRUCT meat USING name, cut, weight, storageTemp, theUseby, packaging
+                     foodArray[index] = meat 
+
+                     index +1 
+                  END IF 
+               END IF 
+
+               ELSE IF  (tWord EQUALS "Grain") 
+                 CONSTRUCT tokenizer USING line, ","
+       
+                iD = tokenizer.nextToken <-- none
+                theName = tokenizer.nextToken <-- none
+                theType = tokenizer.nextToken <-- none
+                theVolume = Double.parseDouble <--tokenizer.nextToken <-- none
+                storageTemp = Double.parseDouble <--tokenizer.nextToken <-- none
+                bestBefore = tokenizer.nextToken <-- none
+                packaging = tokenizer.nextToken <-- none 
+
+                 CONSTRUCT token USING bestBefore, "/"
+                 day = Integer.parseInt<--token.nextToken <-- none 
+                 month = Integer.parseInt <--token.nextToken <-- none
+                 year = Integer.parseInt<--token.nextToken <-- none
+
+                 CONSTRUCT theBest USING year, month, day
+
+                  IF (InputValidation.stringValid <-- theName) AND (InputValidation.doubleValid<--theVolume, 0.2, 5.0) AND (InputValidation.validDate<--theBest) 
+                     CONSTRUCT grain USING  theName, theType, theVolume, storageTemp, theBest,  packaging
+                     foodArray[index] = grain 
+
+                     index +1 
+                  END IF 
+               END IF 
+
+              ELSE IF (tWord EQUALS "Fruit") 
+                 CONSTRUCT tokenizer USING line, ","
+       
+                iD = tokenizer.nextToken <-- none
+                theName = tokenizer.nextToken <-- none
+                theType = tokenizer.nextToken <-- none
+                noPieces = Integer.parseInt <--tokenizer.nextToken <-- none
+                storageTemp = Double.parseDouble <--tokenizer.nextToken <-- none
+                useBy = tokenizer.nextToken <-- none
+                packaging = tokenizer.nextToken <-- none 
+
+                CONSTRUCT token USING useBy, "/"
+                 day = Integer.parseInt<--token.nextToken <-- none 
+                 month = Integer.parseInt <--token.nextToken <-- none
+                 year = Integer.parseInt<--token.nextToken <-- none
+
+                 CONSTRUCT useByF USING year, month, day
+
+                  IF (InputValidation.stringValid <-- theName) AND (InputValidation.intValid<--noPieces, 1, 20) AND (InputValidation.validDate<--useByF) 
+                     CONSTRUCT fruit USING  theName, theType, noPieces, storageTemp, useByF, packaging
+                     foodArray[index] = fruit
+
+                     index +1 
+                  END IF 
+               END IF 
+
+                 ELSE IF (tWord EQUALS "Vegetable") 
+                  CONSTRUCT tokenizer USING line, ","
+       
+                iD = tokenizer.nextToken <-- none
+                theName = tokenizer.nextToken <-- none
+                theWeight = tokenizer.nextToken <-- none
+                storageTemp = Double.parseDouble <--tokenizer.nextToken <-- none
+                bestBefore = tokenizer.nextToken <-- none
+                packaging = tokenizer.nextToken <-- none 
+
+                CONSTRUCT token USING bestBefore, "/"
+                 day = Integer.parseInt<--token.nextToken <-- none 
+                 month = Integer.parseInt <--token.nextToken <-- none
+                 year = Integer.parseInt<--token.nextToken <-- none
+
+                 CONSTRUCT theBest USING year, month, day
+
+                  IF (InputValidation.stringValid <-- theName) AND (InputValidation.doubleValid<--theWeight,0.2,5.0) AND (InputValidation.validDate<--theBest) 
+                     CONSTRUCT fruit USING  theName, theType, noPieces, storageTemp, useByF, packaging
+                     foodArray[index] = fruit
+
+                     index +1 
+                  END IF 
+               END IF 
+
+      INPUT line from theFile
+END SUBMODULE 
+
+SUBMODULE: processString                                  
+IMPORT: line (String)                                     
+EXPORT: stringLine (String)                               
+ ASSERTION: splits first line
+ ALGORITHM: 
+            lineArray = line.split <-- "," 
+            stringline = lineArray[0] 
+END SUBMODULE 
+
+SUBMODULE writeFile
+IMPORT: storage (StorageClass Object), fileName (String)
+EXPORT none
+Assertion: writes the array to a .txt file
+ALGORITHM: 
+
+ storageArray = storage.getArray <-- none 
+ theFile = OPENFILE ''fileName''
+
+ FOR i=0 TO LENGTH OF storageArray[0] (exclusive) INC BY 1 
+   IF (storageArray[0][i] NOT EOF )
+      WRITE "(Location: Pantry) " +storageArray[1][i] TO theFile
+   END IF 
+ ENDFOR
+
+ FOR i=0 TO LENGTH OF storageArray[1] (exclusive) INC BY 1 
+   IF (storageArray[1][i] NOT EOF )
+      WRITE "(Location: Freezer) " +storageArray[1][i] TO theFile
+   END IF 
+ ENDFOR
+
+ FOR i=0 TO LENGTH OF storageArray[2] (exclusive) INC BY 1 
+   IF (storageArray[2][i] NOT EOF )
+      WRITE "(Location: Fridge) " +storageArray[2][i] TO theFile
+   END IF 
+ ENDFOR
+
+ CLOSEFILE theFile
+ 
+END SUBMODULE 
+               
+            
+          
+                
+   

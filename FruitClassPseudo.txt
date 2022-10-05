@@ -1,0 +1,146 @@
+CLASS: FruitClass INHERITS from FoodClass (Implements Ifood)
+
+Class Fields: type, numberOfPieces
+
+Default Constructor 
+IMPORT: NONE 
+EXPORT: constructors never export
+ Assertion: default fruit object is created
+ ALGORITHM:  
+          
+           type = "Granny Smith" 
+           numberOfPieces = 4 
+           
+ALternate Constructor
+IMPORT: theName (String), theType (String), theNumberOfPieces (Integer), theStorageTemp (Real),theDate(GregorianCalendar) , thePackaging (String)
+EXPORT: constructors never export
+  Assertion: Before it creates the object it makes sure that they are valid inputs 
+  ALGORITHM: 
+             super <-- theName,theStorageTemp, thePackaging, theDate
+             IF ( ValidatePieces <--theNumberOfPieces) AND (ValidateString <-- theDate) THEN 
+                    
+                type = theType 
+                numberOfPieces = theNumberOfPieces
+               
+             ELSE 
+                FAIL 
+             END IF 
+
+
+Copy Constructor 
+IMPORT: theFruit (FruitClass) 
+EXPORT: none 
+  Assertion: 
+  ALGORITHM:
+            super <-- theFruit
+            type = theType.getType <-- none 
+            numberOfPieces = theNumberOfPieces.getPieces <-- none 
+        
+Accessors 
+
+SUBMODULE: getType
+IMPORT: none
+EXPORT: type (String)
+  Assertion: will output copy of the type
+  ALGORITHM: 
+            export copy of type
+END SUBMODULE 
+
+SUBMODULE: getPieces 
+IMPORT: none
+EXPORT: numberOfPieces (Integer)
+  Assertion: will output copy of the number of pieces of fruit
+  ALGORITHM: 
+            export copy of numberOfPieces 
+END SUBMODULE 
+
+SUBMODULE: toString 
+IMPORT: none 
+EXPORT: fruitString
+ Assertion: 
+ ALGORITHM: 
+           fruitString = " This fruit is of the type " +type+ " with " +numberOfPieces+ " pieces"
+              
+END SUBMODULE 
+
+SUBMODULE: writeOut 
+IMPORT: none 
+EXPORT: writeString (String)
+ Assertion: 
+ ALGORITHM: 
+           writeString = super.toString <-- none   +type+  ", " +numberOfPieces
+END SUBMODULE 
+
+
+SUBMODULE: equals 
+IMPORT: theObject 
+EXPORT: isequalto (boolean) 
+ Assertion: checks to ensure that theObject is part of the Fruit Class 
+ ALGORITHM: 
+           isequalto = false 
+            IF theObject is really a FruitClass THEN 
+               make theObject to an FruitClass named theFruit
+                IF the super.equals <-- TheFruit THEN 
+                  IF the type same as theFruit.getType <-- none  THEN 
+                    IF the numberOfPieces same as theFruit.getPieces <-- none THEN 
+                             isequalto = true
+END SUBMODULE    
+
+SUBMODULE: clone  
+IMPORT: none
+EXPORT: FruitClass (FruitClass Object)
+Assertion: clones the object 
+ALGORITHM:
+          exports copy of FruitClass
+
+END SUBMODULE
+
+Mutators
+
+MUTATOR: setType 
+IMPORT: theType (String)
+EXPORT: none
+   Assertion: will change the data in the mutator  
+   ALGORTIHM:
+             IF validateString <-- theType THEN 
+             type = theType 
+END MUTATOR  
+
+MUTATOR: setPieces
+IMPORT: theNumberOfPieces (Integer)
+EXPORT: none
+   Assertion: will change the data in the mutator  
+   ALGORTIHM: 
+             IF validatePieces <-- theNumberOfPieces THEN 
+             numberOfPieces = theNumberOfPieces
+END MUTATOR  
+
+SUBMODULE: validateP                                    
+IMPORT: theNumberOfPieces (Integer)                  
+EXPORT: validateP (boolean)                                  
+ Assertion: validates if the pieces is within the range
+ ALGORITHM: 
+           IF theNumberOfPieces >= 1 && theNumberOfPieces <= 20 THEN 
+              valid = true
+END SUBMODULE 
+
+SUBMODULE: validateString
+IMPORT: word (String)
+EXPORT: valid (boolean)
+ Assertion: validates if the date is valid if not will disregard the object
+ ALGORITHM: 
+            IF word != null THEN 
+               valid = true 
+END SUBMODULE 
+
+SUBMODULE: calcSpace                                     
+IMPORT: food (FoodClass Object)                          
+EXPORT: space (Integer)                                 
+Assertion: calculates the space in pieces  
+ALGORITHM: 
+          space =  (Convert to Integer) (numberOfPieces * 1.95)
+END SUBMODULE
+ 
+ 
+ 
+
